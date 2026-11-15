@@ -1,3 +1,4 @@
+using GovenSiteAPI.Mappers;
 using GovenSiteAPI.Models;
 using Microsoft.Extensions.Options;
 
@@ -27,6 +28,8 @@ public class WeatherService(
                     ErrorMessage = content.Error.Message
                 };
             }
+
+            content.CurrentWeather.Condition.Text = WeatherMapper.MapWeatherCondition(content.CurrentWeather.Condition.Code);
     
             return content;
         }
