@@ -3,8 +3,10 @@ using System.Text.Json.Serialization;
 namespace GovenSiteAPI.Models;
 public class ArtistDiscographyDto
 {
+    public ErrorDto? Error { get; set; }
     [JsonPropertyName("total")]
     public int TotalAlbums { get; set; }
+    [JsonPropertyName("items")]
     public List<Album> Albums { get; set; } = [];
 
 }
