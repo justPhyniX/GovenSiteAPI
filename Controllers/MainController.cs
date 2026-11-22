@@ -1,20 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using GovenSiteAPI.Models;
-using GovenSiteAPI.Services;
+using GovenSiteAPI.Persistence;
 
 namespace GovenSiteAPI.Controllers;
 
 [ApiController]
 [Route("api")]
-public class MainController(WeatherService weatherService, SpotifyService spotifyService) : Controller
+public class MainController(DataCache dataCache) : Controller
 {
-    private readonly WeatherService _weatherService = weatherService;
-    private readonly SpotifyService _spotifyService = spotifyService;
+    private readonly DataCache _cache = dataCache;
 
     [HttpGet(nameof(GetWeather))]
-    public async Task<IActionResult> GetWeather([FromQuery] string city)
+    public IActionResult GetWeather()
     {
-        var response = await _weatherService.GetWeatherAsync(city);
+        var response = _cache.Get<object>("weather");
         
         if (response is ErrorDto error)
             return StatusCode(error.StatusCode, new { error.ErrorMessage });
@@ -23,10 +22,10 @@ public class MainController(WeatherService weatherService, SpotifyService spotif
     }
 
     [HttpGet(nameof(GetDiscography))]
-    public async Task<IActionResult> GetDiscography([FromQuery] string artist)
+    public IActionResult GetDiscography([FromQuery] string artist)
     {
-        // Placeholder for discography logic
-        var response = await _spotifyService.GetArtistDiscography(artist);
+        var response = _cache.Get<object>($"discography{artist}");
+
         if (response is ErrorDto error)
             return StatusCode(error.StatusCode, new { error.ErrorMessage });
 
