@@ -11,7 +11,7 @@ public class WeatherService(
     private readonly WeatherConfiguration _weatherConfig = weatherConfig.Value;
     private readonly HttpClient _httpClient = httpClient;
 
-    public async Task<object?> GetWeatherAsync(string city)
+    public async Task<object> GetWeatherAsync(string city)
     {
         try
         {

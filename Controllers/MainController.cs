@@ -6,14 +6,10 @@ namespace GovenSiteAPI.Controllers;
 
 [ApiController]
 [Route("api")]
-public class MainController : Controller
+public class MainController(WeatherService weatherService, SpotifyService spotifyService) : Controller
 {
-    private readonly WeatherService _weatherService;
-
-    public MainController(WeatherService weatherService)
-    {
-        _weatherService = weatherService;
-    }
+    private readonly WeatherService _weatherService = weatherService;
+    private readonly SpotifyService _spotifyService = spotifyService;
 
     [HttpGet(nameof(GetWeather))]
     public async Task<IActionResult> GetWeather([FromQuery] string city)
@@ -23,6 +19,17 @@ public class MainController : Controller
         if (response is ErrorDto error)
             return StatusCode(error.StatusCode, new { error.ErrorMessage });
         
+        return Ok(response);
+    }
+
+    [HttpGet(nameof(GetDiscography))]
+    public async Task<IActionResult> GetDiscography([FromQuery] string artist)
+    {
+        // Placeholder for discography logic
+        var response = await _spotifyService.GetArtistDiscography(artist);
+        if (response is ErrorDto error)
+            return StatusCode(error.StatusCode, new { error.ErrorMessage });
+
         return Ok(response);
     }
 }
